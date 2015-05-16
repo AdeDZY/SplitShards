@@ -42,7 +42,7 @@ for line in size_file:
     print size
     if size < thresholds:
         continue
-    f.write(shard + " " + str(size/100000 + 1) + '\n')
+    f.write(shard + " " + str(size/100000 + 1) + " " + str(size) + '\n')
     if not os.path.exists(base_dir + "/" + shard):
         os.makedirs(base_dir+"/"+shard)
 
