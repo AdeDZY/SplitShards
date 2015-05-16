@@ -9,10 +9,14 @@ parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
 parser.add_argument("job_type", type=int, help="1:extid2intid, 2:intid2docVec")
 parser.add_argument("--sleep", "-s", type=int, help="sleep time in seconds", default=90)
+parser.add_argument("--nbatch", "-n", type=int, help="submit n batches at one time", default=1)
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
 shard_file = open(base_dir + "/shard")
+
+n = 0
+
 for line in shard_file:
     shard = line.strip().split()[0]
     if args.job_type == 1:
@@ -24,5 +28,7 @@ for line in shard_file:
 
     cmd = "condor_submit " + job_path
     os.system(cmd)
-    time.sleep(args.sleep)
+    n += 1
+    if n % args.nbatch == 0:
+        time.sleep(args.sleep)
 shard_file.close()
