@@ -5,7 +5,8 @@ __author__ = 'zhuyund'
 # for a partition
 # 0. find big shards
 # 1. split shardmaps
-# 2. extid -> intid
+# 2. gen jobs: extid -> intid
+# 3. gen jobs: intid -> docVec
 
 import argparse
 import os, sys
@@ -37,8 +38,8 @@ for line in size_file:
     shard = shard.split('/')[-1]
     if shard == "total" or shard == "size":
         continue
-    f.write(shard + '\n')
     size = int(size)
+    f.write(shard + " " + str(size/100000 + 1) + '\n')
     print size
     if size < thresholds:
         continue
@@ -62,6 +63,12 @@ for line in size_file:
 
     os.system("./genExtid2IntidJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, extid_dir, intid_dir, size/100000 + 1, job_file_path))
     print "extid2intid job wrote to " + job_file_path
+
+    # gen intid->docvec jobs
+    dv_dir = base_dir + "/" + shard + "/docvec/"
+    job_file_path = job_dir + "dumpVectors.job"
+    os.system("./genDumVectorJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, intid_dir, dv_dir, size/100000 + 1, job_file_path))
+    print "dumpVectors job wrote to " + job_file_path
 
 size_file.close()
 
