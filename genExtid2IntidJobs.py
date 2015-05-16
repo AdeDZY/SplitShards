@@ -18,7 +18,7 @@ args = parser.parse_args()
 executable = "/bos/usr0/zhuyund/partition/DocVectors/extid2intid"
 
 log_file = "/tmp/zhuyund_extid2intid.log"
-log_dir = "./log/"
+log_dir = "/bos/usr0/zhuyund/partition/SplitShards/log/"
 err_file = log_dir + "extid2intid.err"
 out_file = log_dir + "extid2intid.out"
 

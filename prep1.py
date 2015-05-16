@@ -16,30 +16,40 @@ parser.add_argument("shardmaps_dir")
 parser.add_argument("repo_dir")
 args = parser.parse_args()
 
-base_dir = "./output/" + args.partition_name
+base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
+print base_dir
+
 
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
 
 # big shards
-thresholds = 700000
+thresholds = 1000000
 if not os.path.isfile(args.shardmaps_dir + "/size"):
     print "no size file!"
     sys.exit(-1)
 
 size_file = open(args.shardmaps_dir + "/size")
+f = open(base_dir + "/shard", "w") # write splitted shard ids into this file
 for line in size_file:
     line = line.strip()
     size, shard = line.split()
+    shard = shard.split('/')[-1]
+    if shard == "total" or shard == "size":
+        continue
+    f.write(shard + '\n')
     size = int(size)
+    print size
     if size < thresholds:
         continue
-    os.makedirs(base_dir+"/"+shard)
+    if not os.path.exists(base_dir + "/" + shard):
+        os.makedirs(base_dir+"/"+shard)
 
     # split
     extid_dir = base_dir+"/"+shard + "/extid/"
+    print extid_dir
     if not os.path.exists(extid_dir):
-        os.makedirs(exit())
+        os.makedirs(extid_dir)
     print "spliting extid. shard: " + shard
     os.system("./splitShardMap.py {0} {1}".format(args.shardmaps_dir+"/"+shard, extid_dir))
 
@@ -55,7 +65,7 @@ for line in size_file:
 
 size_file.close()
 
-
+f.close()
 
 
 
