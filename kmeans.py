@@ -13,7 +13,7 @@ parser.add_argument("iter_count")
 args = parser.parse_args()
 print args
 
-baseDir = '/bos/usr0/zhuyund/partition/SplitShards/output/' + args.name
+baseDir = '/bos/usr0/zhuyund/partition/SplitShards/output/' + args.name + '/' + args.shard
 
 # corresponding to different sampling trials
 datFile = baseDir+'/sampled.dat'

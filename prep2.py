@@ -41,6 +41,7 @@ base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_na
 print base_dir
 
 f = open(base_dir + "/shard") # splitted shard ids and numbers
+sample_rate = 0.1  # sample rate = 10%
 for line in f:
     line = line.strip()
     shard, num, size = line.split()
@@ -51,7 +52,8 @@ for line in f:
 
 
     # sampling
-
+    cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
+    os.system(cmd)
 
     # number of clusters
     ncluster = get_ncluster(size)
