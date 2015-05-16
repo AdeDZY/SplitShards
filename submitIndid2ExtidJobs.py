@@ -16,5 +16,5 @@ for line in shard_file:
     job_path = base_dir + "/" + shard + "/jobs/extid2intid.job"
     cmd = "condor_submit " + job_path
     os.system(cmd)
-    time.sleep(120)
+    time.sleep(70)
 shard_file.close()

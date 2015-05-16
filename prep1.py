@@ -37,11 +37,11 @@ for line in size_file:
     shard = shard.split('/')[-1]
     if shard == "total" or shard == "size":
         continue
-    f.write(shard + '\n')
     size = int(size)
     print size
     if size < thresholds:
         continue
+    f.write(shard + '\n')
     if not os.path.exists(base_dir + "/" + shard):
         os.makedirs(base_dir+"/"+shard)
 
@@ -51,7 +51,7 @@ for line in size_file:
     if not os.path.exists(extid_dir):
         os.makedirs(extid_dir)
     print "spliting extid. shard: " + shard
-    os.system("./splitShardMap.py {0} {1}".format(args.shardmaps_dir+"/"+shard, extid_dir))
+    #os.system("./splitShardMap.py {0} {1}".format(args.shardmaps_dir+"/"+shard, extid_dir))
 
     # gen extid->intid jobs
     intid_dir = base_dir+"/"+shard + "/intid/"
