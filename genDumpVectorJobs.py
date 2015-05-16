@@ -34,8 +34,8 @@ job_file = open(args.output_file_path, "w")
 #  std::string outFileName = argv[3];
 #  std::string stoplistFile = argv[4];
 
-for i in range(1, args.n_shardmap_files + 1):
-    arguments = "{0} {1}/{2}.intid {3}/{2}.dat /bos/usr0/zhuyund/partition/DocVectors/stoplist.dft".format(args.repo_dir, args.intid_dir, i, args.dv_dri)
+for i in range(1, args.n_intid_files + 1):
+    arguments = "{0} {1}/{2}.intid {3}/{2}.dat /bos/usr0/zhuyund/partition/DocVectors/stoplist.dft".format(args.repo_dir, args.intid_dir, i, args.dv_dir)
 
     job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
 

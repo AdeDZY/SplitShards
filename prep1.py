@@ -39,11 +39,10 @@ for line in size_file:
     if shard == "total" or shard == "size":
         continue
     size = int(size)
-    f.write(shard + " " + str(size/100000 + 1) + '\n')
     print size
     if size < thresholds:
         continue
-    f.write(shard + '\n')
+    f.write(shard + " " + str(size/100000 + 1) + '\n')
     if not os.path.exists(base_dir + "/" + shard):
         os.makedirs(base_dir+"/"+shard)
 
@@ -68,7 +67,7 @@ for line in size_file:
     # gen intid->docvec jobs
     dv_dir = base_dir + "/" + shard + "/docvec/"
     job_file_path = job_dir + "dumpVectors.job"
-    os.system("./genDumVectorJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, intid_dir, dv_dir, size/100000 + 1, job_file_path))
+    os.system("./genDumpVectorJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, intid_dir, dv_dir, size/100000 + 1, job_file_path))
     print "dumpVectors job wrote to " + job_file_path
 
 size_file.close()
