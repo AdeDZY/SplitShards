@@ -3,56 +3,52 @@ import string
 import sys, os
 import argparse
 
-parser = argparse.ArgumentParser()
+#!/opt/python27/bin/python
 
-parser.add_argument("datFileDir")
-parser.add_argument("clusterTrialDir")
-parser.add_argument("numPartstr")
-parser.add_argument("lambstr")
-parser.add_argument("outputFilePrefix",help="output file prefix")
+__author__ = 'zhuyund'
+
+import argparse
+import os
+import jobWriter
+
+parser = argparse.ArgumentParser()
+parser.add_argument("dv_dir")
+parser.add_argument("kmeans_dir")
+parser.add_argument("n_clusters")
+parser.add_argument("n_shardmap_files", type=int)
+parser.add_argument("output_file_path", help="write condor jobs into here")
 args = parser.parse_args()
 
-nDoc = 50220423
-splitSize = 100000 
+executable = '/bos/tmp11/zhuyund/partition/Inference-field/inference'
 
-centroidDirPath = args.clusterTrialDir + '/centroids'
-inferenceDirPath = args.clusterTrialDir + '/inference'
-if not os.path.exists(inferenceDirPath):
-	os.makedirs(inferenceDirPath)
+log_file = "/tmp/zhuyund_infernce.log"
+log_dir = "/bos/usr0/zhuyund/partition/SplitShards/log/"
+err_file = log_dir + "inference.err"
+out_file = log_dir + "inference.out"
 
-param_file = open(args.clusterTrialDir + '/param')
-for line in param_file:
-	k,v = line.split(':')
-	if k == 'weights':
-		weights = v[1:-2].split(',')
-param_file.close()
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
 
-startID = 1
 
-head = 'Universe = vanilla'
-head = head + '\nExecutable = /bos/tmp11/zhuyund/partition/Inference-field/inference'
-head = head + '\n\n' + 'Log = /tmp/zhuyund_inference.log'
-head = head +  '\nOutput = log/inference.out'
-head = head + '\nError = log/inference.err\n'
+if not os.path.exists(args.kmeans_dir + "/inference"):
+    os.makedirs(args.kmeans_dir + "/inference")
 
-nJob = 0
-startID = 1
-f = open('tmp.f','w')
-while startID < nDoc:
-	endID = startID + splitSize - 1
-	if endID > nDoc:
-		endID = nDoc
-	inferenceFilePath = inferenceDirPath+'/' + 'cw09catB_'+ str(startID) + '-' + str(endID) + '.inference'
-	datFilePath = args.datFileDir + '/' + 'cw09catB_'+ str(startID) + '-' + str(endID) + '.dat'
-	if nJob%50== 0:
-		f.close()
-		f = open(args.outputFilePrefix+'_'+str(nJob/50)+'.job','w')
-		f.write(head)
-	cmd = 'Arguments = ' + datFilePath + ' ' + centroidDirPath + ' ' + inferenceFilePath + ' ' + args.numPartstr + ' ' + args.lambstr + ' 5 ' 
-	for w in range(5):
-		cmd += ' ' + (weights[w])
-	f.write(cmd)
-	f.write('\nQueue'+'\n\n')
-	nJob = nJob + 1
-	startID = endID + 1
+job_file = open(args.output_file_path, "w")
+
+for i in range(1, args.n_shardmap_files + 1):
+
+    arguments = "{0}/{1}.dat  {2}/centroids/ {2}/inference/ {3} 0.1 1 1".format(args.dv_dir,
+                                                                                i,
+                                                                                args.kmeans_dir,
+                                                                                args.n_clusters)
+
+    job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
+
+    job_file.write(job)
+
+job_file.close()
+
+
+
+
 
