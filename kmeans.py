@@ -10,6 +10,7 @@ parser.add_argument("name", help="run name. eg. cw-s1c1")
 parser.add_argument("shard", help="shard to split. eg. 1")
 parser.add_argument("n_clusters")
 parser.add_argument("iter_count")
+parser.add_argument("lamda")
 parser.add_argument("--ref_threshold", "-r", type=float, default=1.0)
 args = parser.parse_args()
 print args
@@ -19,7 +20,6 @@ baseDir = '/bos/usr0/zhuyund/partition/SplitShards/output/' + args.name + '/' + 
 # corresponding to different sampling trials
 datFile = baseDir+'/sampled.dat'
 
-lamda = '0.3'
 minVocabSeed = '400'
 
 trialDir = baseDir + '/kmeans/'
@@ -36,7 +36,7 @@ if not os.path.exists(centroidDir):
 
 logFile = trialDir+'log'
 cmd = "/bos/tmp11/zhuyund/partition/Clustering-field/kmeans "\
-      +datFile+" "+args.n_clusters+" "+lamda+" "+args.iter_count\
+      +datFile+" "+args.n_clusters+" "+args.lamda+" "+args.iter_count\
       +" "+centroidDir+" "+minVocabSeed+" " + '1 ' + '1 '
 
 cmd += " " + "selectSeeds" + " field " + str(args.ref_threshold) + " >& " + logFile
