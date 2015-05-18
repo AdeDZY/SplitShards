@@ -19,7 +19,7 @@ baseDir = '/bos/usr0/zhuyund/partition/SplitShards/output/' + args.name + '/' + 
 # corresponding to different sampling trials
 datFile = baseDir+'/sampled.dat'
 
-lamda = '0.1'
+lamda = '0.3'
 minVocabSeed = '400'
 
 trialDir = baseDir + '/kmeans/'
