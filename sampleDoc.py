@@ -19,9 +19,8 @@ for i in range(1, args.n_split_files + 1):
     dvFile = open('{0}/{1}.dat'.format(inputDvDir, i))
     for line in dvFile:
         if random.random() <= args.sampleRate:
-            outputDvFile.write(line)
+            outputDvFile.write(line.strip() + '\n')
             outputIDFile.write(str(id)+'\n')
-        id = id + 1
     dvFile.close()
 
 outputDvFile.close()

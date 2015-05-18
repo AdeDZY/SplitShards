@@ -17,6 +17,7 @@ parser.add_argument("kmeans_dir")
 parser.add_argument("n_clusters")
 parser.add_argument("n_shardmap_files", type=int)
 parser.add_argument("output_file_path", help="write condor jobs into here")
+parser.add_argument("--ref_threshold","-r", type=float, help="ignore terms with ref > threshold", default=1.0)
 args = parser.parse_args()
 
 executable = '/bos/tmp11/zhuyund/partition/Inference-field/inference'
@@ -37,10 +38,10 @@ job_file = open(args.output_file_path, "w")
 
 for i in range(1, args.n_shardmap_files + 1):
 
-    arguments = "{0}/{1}.dat  {2}/centroids/ {2}/inference/ {3} 0.1 1 1".format(args.dv_dir,
+    arguments = "{0}/{1}.dat  {2}/centroids/ {2}/inference/{1}.inference {3} 0.1 1 1 field {4} ".format(args.dv_dir,
                                                                                 i,
                                                                                 args.kmeans_dir,
-                                                                                args.n_clusters)
+                                                                                args.n_clusters, args.ref_threshold)
 
     job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
 

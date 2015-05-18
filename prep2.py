@@ -35,6 +35,10 @@ def get_ncluster(shard_size):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
+parser.add_argument("--shard","-s",  help="only one shard", default="")
+parser.add_argument("--start","-t",  type=int, default=1)
+parser.add_argument("--end","-e",  type=int, default=200)
+parser.add_argument("--ref_threshold","-r",  type=float, default=1.0)
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
@@ -42,9 +46,15 @@ print base_dir
 
 f = open(base_dir + "/shard") # splitted shard ids and numbers
 sample_rate = 0.1  # sample rate = 10%
+nline = 0
 for line in f:
+    nline += 1
+    if nline < args.start or nline > args.end:
+        continue
     line = line.strip()
     shard, num, size = line.split()
+    if args.shard and shard != args.shard:
+        continue
     num = int(num)
     size = int(size)
     if shard == "total" or shard == "size":
@@ -52,8 +62,8 @@ for line in f:
 
 
     # sampling
-    cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
-    os.system(cmd)
+   # cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
+   # os.system(cmd)
 
     # number of clusters
     ncluster = get_ncluster(size)
@@ -62,7 +72,7 @@ for line in f:
     job_dir = base_dir+"/" + shard + "/jobs/"
     job_file = open(job_dir + "/kmeans.job", 'w')
     executable = "/bos/usr0/zhuyund/partition/SplitShards/kmeans.py"
-    arguments = "{0} {1} {2} {3}".format(args.partition_name, shard, ncluster, 10)
+    arguments = "{0} {1} {2} {3} -r {4}".format(args.partition_name, shard, ncluster, 10, args.ref_threshold)
     log_file = "/tmp/zhuyund_kmeans.log"
     out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/kmeans.out"
     err_file = "/bos/usr0/zhuyund/partition/SplitShards/log/kmeans.err"
@@ -74,7 +84,7 @@ for line in f:
     # gen inference job
     dv_dir = base_dir+"/"+ shard + "/docvec/"
     job_file_path = job_dir + "/inference.job"
-    os.system("./genInferenceJob.py {0} {1} {2} {3} {4}".format(args.repo_dir, dv_dir, ncluster, num, job_file_path))
+    os.system("./genInferenceJob.py {0} {1} {2} {3} {4} -r {5}".format(dv_dir, base_dir+"/"+shard+"/kmeans/", ncluster, num, job_file_path, args.ref_threshold))
     print "inference job write to " + job_file_path
 
 
