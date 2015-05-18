@@ -1,61 +1,45 @@
 #!/opt/python27/bin/python
-import string
-import sys, os
+
+import os
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument("inferResDir", help="director containing inference results")
-parser.add_argument("shardNum",type = int, help="the file of externel IDs")
+parser.add_argument("infer_dir", help="director containing inference results")
+parser.add_argument("extid_dir", help="extid files")
+parser.add_argument("shardNum", type=int, help="the file of externel IDs")
 parser.add_argument("outputDir", help="output director")
-parser.add_argument("-d","--docNum", type=int, default=50220423, help="number of docs. default: clueweb B 50220423")
+parser.add_argument("n_files", type=int, help="number of splitted files")
 args = parser.parse_args()
 
-inferResDir = args.inferResDir
-extidPath = "/bos/usr0/zhuyund/partition/cw09catB/02-DocVectors/all.extid" 
-shardNum = args.shardNum 
-outputDir = args.outputDir 
-docNum = args.docNum 
-splitSize = 100000
 
-extidFile = open(extidPath, 'r')
-startID = 1
-intidPrev = 0
+shardMap = [list() for i in range(0, args.shardNum)]
 
-shardMap = [list() for i in range(0, shardNum)]
+for i in range(1, args.n_files + 1):
 
-while startID < docNum:
-	endID = startID + splitSize - 1
-	if endID > docNum:
-		endID = docNum
-	inferFilePath = inferResDir + '/cw09catB_' + str(startID) + '-' + str(endID) + '.inference'
-	print inferFilePath
-	inferFile = open(inferFilePath, 'r')
-	
-	nLine = 0
-	for line in inferFile:
-		items = [int(item) for item in line.split(':')]
-		intid = items[0] + startID - 1
-		shardID = items[1]
+    inferFilePath = args.infer_dir + "/" + str(i) + '.inference'
+    extidFilePath = args.extid_dir + "/" + str(i) + '.inference'
 
-		# in case of missing docs
-		while intidPrev < intid:
-			intidPrev = intidPrev + 1
-			extid = extidFile.readline().strip()
+    inferFile = open(inferFilePath, 'r')
+    extidFile = open(extidFilePath, 'r')
 
-		shardMap[shardID - 1].append(extid)
-		nLine = nLine + 1
-		if nLine >= splitSize:
-			break
-	inferFile.close()
-	startID = endID + 1
+    for line in inferFile:
+        items = [int(item) for item in line.split(':')]
+        shardID = items[1]
 
-if not os.path.exists(outputDir):
-	os.makedirs(outputDir)
+        extid = extidFile.readline().strip()
 
-for i in range(0, shardNum):
-	outFile = open(outputDir+'/'+str(i + 1),'w')
-	for extid in shardMap[i]:
-		outFile.write(extid + '\n')
+        shardMap[shardID - 1].append(extid)
+
+    inferFile.close()
+    extidFile.close()
+
+if not os.path.exists(args.outputDir):
+    os.makedirs(args.outputDir)
+
+for i in range(0, args.shardNum):
+    outFile = open(args.outputDir+'/'+str(i + 1), 'w')
+    for extid in shardMap[i]:
+        outFile.write(extid + "\n")
 
 extidFile.close()
 outFile.close()

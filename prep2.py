@@ -83,10 +83,26 @@ for line in f:
     print "kmeans job write to: " + job_dir + "/kmeans.job"
 
     # gen inference job
-    dv_dir = base_dir+"/"+ shard + "/docvec/"
+    dv_dir = base_dir+"/" + shard + "/docvec/"
     job_file_path = job_dir + "/inference.job"
     os.system("./genInferenceJob.py {0} {1} {2} {3} {4} {6} -r {5}".format(dv_dir, base_dir+"/"+shard+"/kmeans/", ncluster, num, job_file_path, args.ref_threshold, args.lamda))
     print "inference job write to " + job_file_path
+
+    # gen getShardMap job
+    shardmap_dir = base_dir + "/" + shard + "/shardMap/"
+    infer_dir = base_dir + "/" + shard + "/kmeans/inference/"
+    extid_dir = base_dir + "/" + shard + "/extid/"
+
+    job_file_path = job_dir + "/shardmap.job"
+    executable = "/bos/usr0/zhuyund/partition/SplitShards/getShardMap.py"
+    arguments = "{0} {1} {2} {3} {5} -r {4}".format(infer_dir, extid_dir, ncluster, shardmap_dir, num)
+    log_file = "/tmp/zhuyund_shardmap.log"
+    out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.out"
+    err_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.err"
+    job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
+    job_file.write(job)
+    job_file.close()
+    print "shardmap job write to: " + job_dir + "/shardmap.job"
 
 
 f.close()
