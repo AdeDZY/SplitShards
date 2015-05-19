@@ -63,8 +63,8 @@ for line in f:
 
 
     # sampling
-    cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
-    os.system(cmd)
+    #cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
+    #os.system(cmd)
 
     # number of clusters
     ncluster = get_ncluster(size)
