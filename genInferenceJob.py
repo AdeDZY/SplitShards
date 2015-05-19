@@ -39,7 +39,7 @@ job_file = open(args.output_file_path, "w")
 
 for i in range(1, args.n_shardmap_files + 1):
 
-    arguments = "{0}/{1}.dat  {2}/centroids/ {2}/inference/{1}.inference {3} {5}1 1 field {4} ".format(args.dv_dir,
+    arguments = "{0}/{1}.dat  {2}/centroids/ {2}/inference/{1}.inference {3} {5} 1 1 field {4} ".format(args.dv_dir,
                                                                                 i,
                                                                                 args.kmeans_dir,
                                                                                 args.n_clusters, args.ref_threshold, args.lamda)
