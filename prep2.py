@@ -36,10 +36,10 @@ def get_ncluster(shard_size):
 parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
 parser.add_argument("lamda")
-parser.add_argument("--shard","-s",  help="only one shard", default="")
-parser.add_argument("--start","-t",  type=int, default=1)
-parser.add_argument("--end","-e",  type=int, default=200)
-parser.add_argument("--ref_threshold","-r",  type=float, default=1.0)
+parser.add_argument("--shard", "-s",  help="only one shard", default="")
+parser.add_argument("--start", "-t",  type=int, default=1)
+parser.add_argument("--end", "-e",  type=int, default=200)
+parser.add_argument("--ref_threshold", "-r",  type=float, default=1.0)
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
@@ -63,8 +63,8 @@ for line in f:
 
 
     # sampling
-    #cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
-    #os.system(cmd)
+    cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
+    os.system(cmd)
 
     # number of clusters
     ncluster = get_ncluster(size)
