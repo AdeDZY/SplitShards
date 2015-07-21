@@ -12,9 +12,13 @@ parser.add_argument("intid_dir", help="intid files")
 parser.add_argument("dv_dir", help="write doc vectors here")
 parser.add_argument("n_intid_files", type=int)
 parser.add_argument("output_file_path", help="write condor jobs into here")
+parser.add_argument("--oneRepo", "-o", action="store_true", help="only one index repo")
 args = parser.parse_args()
 
-executable = "/bos/usr0/zhuyund/partition/DocVectors/dumpVectors"
+if not args.oneRepo:
+    executable = "/bos/usr0/zhuyund/partition/DocVectors/dumpVectors"
+else:
+    executable = "/bos/usr0/zhuyund/partition/DocVectors/dumpVectors-int-oneRepo"
 
 log_file = "/tmp/zhuyund_dumpVectors.log"
 log_dir = "/bos/usr0/zhuyund/partition/SplitShards/log/"
@@ -35,7 +39,8 @@ job_file = open(args.output_file_path, "w")
 #  std::string stoplistFile = argv[4];
 
 for i in range(1, args.n_intid_files + 1):
-    arguments = "{0} {1}/{2}.intid {3}/{2}.dat /bos/usr0/zhuyund/partition/DocVectors/stoplist.dft".format(args.repo_dir, args.intid_dir, i, args.dv_dir)
+    arguments = "{0} {1}/{2}.intid {3}/{2}.dat /bos/usr0/zhuyund/partition/DocVectors/stoplist.dft 1".format(args.repo_dir, args.intid_dir, i, args.dv_dir)
+    # 1 for gov2 one field
 
     job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
 
