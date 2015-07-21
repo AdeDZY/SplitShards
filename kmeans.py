@@ -35,7 +35,7 @@ if not os.path.exists(centroidDir):
 
 
 logFile = trialDir+'log'
-cmd = "/bos/tmp11/zhuyund/partition/Clustering-field/kmeans "\
+cmd = "/bos/tmp11/zhuyund/partition/Clustering-field-int/kmeans "\
       +datFile+" "+args.n_clusters+" "+args.lamda+" "+args.iter_count\
       +" "+centroidDir+" "+minVocabSeed+" " + '1 ' + '1 '
 
