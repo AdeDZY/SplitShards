@@ -95,11 +95,12 @@ for line in f:
 
     job_file_path = job_dir + "/shardmap.job"
     executable = "/bos/usr0/zhuyund/partition/SplitShards/getShardMap.py"
-    arguments = "{0} {1} {2} {3} {5} -r {4}".format(infer_dir, extid_dir, ncluster, shardmap_dir, num)
+    arguments = "{0} {1} {2} {3} {4}".format(infer_dir, extid_dir, ncluster, shardmap_dir, num)
     log_file = "/tmp/zhuyund_shardmap.log"
     out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.out"
     err_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.err"
     job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
+    job_file = open(job_file_path, 'w')
     job_file.write(job)
     job_file.close()
     print "shardmap job write to: " + job_dir + "/shardmap.job"

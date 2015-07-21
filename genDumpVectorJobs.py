@@ -39,26 +39,12 @@ job_file = open(args.output_file_path, "w")
 #  std::string stoplistFile = argv[4];
 
 for i in range(1, args.n_intid_files + 1):
-    arguments = "{0} {1}/{2}.intid {3}/{2}.dat /bos/usr0/zhuyund/partition/DocVectors/stoplist.dft 1".format(args.repo_dir, args.intid_dir, i, args.dv_dir)
-    # 1 for gov2 one field
+    arguments = "{0} {1}/{2}.intid {3}/{2}.dat /bos/usr0/zhuyund/partition/DocVectors/stoplist.dft 0".format(args.repo_dir, args.intid_dir, i, args.dv_dir)
+    # 0 for gov2 one field
 
     job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
 
     job_file.write(job)
 
 job_file.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
