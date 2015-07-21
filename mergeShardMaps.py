@@ -3,8 +3,28 @@
 __author__ = 'zhuyund'
 
 import argparse
-import os, sys
-import jobWriter
+import os
+import sys
+
+def get_ncluster(shard_size):
+    """
+    number of clusters
+    :param sahrd_size:
+    :return: int
+    """
+
+    n_cluster = 2
+    aim = 500000.0
+
+    if shard_size < aim:
+        return 1
+
+    while True:
+        if float(shard_size)/n_cluster - aim < aim - float(shard_size)/(n_cluster + 1):
+            break
+        n_cluster += 1
+    return n_cluster
+
 
 
 parser = argparse.ArgumentParser()
@@ -23,7 +43,7 @@ f = open(base_dir + "/shard") # splitted shard ids and numbers
 splitted_shards = {}
 for line in f:
     shard, num, size = line.split()
-    splitted_shards[shard] = int(num)
+    splitted_shards[shard] = get_ncluster(int(size))
 
 
 if not os.path.isfile(args.org_shardmaps_dir + "/size"):
