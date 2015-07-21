@@ -7,7 +7,7 @@ import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
-parser.add_argument("job_type", type=int, help="1:extid2intid, 2:intid2docVec 3:kmeans 4:inference")
+parser.add_argument("job_type", type=int, help="1:extid2intid, 2:intid2docVec 3:kmeans 4:inference, 5:shardmap")
 parser.add_argument("--sleep", "-s", type=int, help="sleep time in seconds", default=90)
 parser.add_argument("--nbatch", "-n", type=int, help="submit n batches at one time", default=1)
 parser.add_argument("--start", "-t", type=int, help="start from this line of shard file", default=1)
@@ -34,6 +34,8 @@ for line in shard_file:
         job_path = base_dir + "/" + shard + "/jobs/kmeans.job"
     elif args.job_type == 4:
         job_path = base_dir + "/" + shard + "/jobs/inference.job"
+    elif args.job_type = 5:
+        job_path = base_dir + "/" + shard + "/jobs/shardmap.job"
     else:
         print "wrong job type!"
 
