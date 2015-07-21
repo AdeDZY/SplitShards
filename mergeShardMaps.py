@@ -9,7 +9,7 @@ import jobWriter
 
 parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
-parser.add_argument("org_sahrdmaps_dir")
+parser.add_argument("org_shardmaps_dir")
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
@@ -23,7 +23,7 @@ f = open(base_dir + "/shard") # splitted shard ids and numbers
 splitted_shards = {}
 for line in f:
     shard, num, size = line.split()
-    splitted_shards[shard] = num
+    splitted_shards[shard] = int(num)
 
 
 if not os.path.isfile(args.org_shardmaps_dir + "/size"):
