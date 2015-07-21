@@ -100,6 +100,7 @@ for line in f:
     out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.out"
     err_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.err"
     job = jobWriter.jobGenerator(executable, arguments, log_file, err_file, out_file)
+    job_file = open(job_file_path, 'w')
     job_file.write(job)
     job_file.close()
     print "shardmap job write to: " + job_dir + "/shardmap.job"
