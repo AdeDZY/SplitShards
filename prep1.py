@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
 parser.add_argument("shardmaps_dir")
 parser.add_argument("repo_dir")
+parser.add_argument("--oneRepo", "-o", action="store_true", help="only one index repo")
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
@@ -52,7 +53,7 @@ for line in size_file:
     if not os.path.exists(extid_dir):
         os.makedirs(extid_dir)
     print "spliting extid. shard: " + shard
-    #os.system("./splitShardMap.py {0} {1}".format(args.shardmaps_dir+"/"+shard, extid_dir))
+    os.system("./splitShardMap.py {0} {1}".format(args.shardmaps_dir+"/"+shard, extid_dir))
 
     # gen extid->intid jobs
     intid_dir = base_dir+"/"+shard + "/intid/"
@@ -61,13 +62,21 @@ for line in size_file:
         os.makedirs(job_dir)
     job_file_path = job_dir + "extid2intid.job"
 
-    os.system("./genExtid2IntidJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, extid_dir, intid_dir, size/100000 + 1, job_file_path))
+    if not args.oneRepo:
+        os.system("./genExtid2IntidJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, extid_dir, intid_dir, size/100000 + 1, job_file_path))
+    else:
+        os.system("./genExtid2IntidJobs.py {0} {1} {2} {3} {4} -o".format(args.repo_dir, extid_dir, intid_dir, size/100000 + 1, job_file_path))
+
     print "extid2intid job wrote to " + job_file_path
 
     # gen intid->docvec jobs
     dv_dir = base_dir + "/" + shard + "/docvec/"
     job_file_path = job_dir + "dumpVectors.job"
-    os.system("./genDumpVectorJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, intid_dir, dv_dir, size/100000 + 1, job_file_path))
+    if not args.oneRepo:
+        os.system("./genDumpVectorJobs.py {0} {1} {2} {3} {4}".format(args.repo_dir, intid_dir, dv_dir, size/100000 + 1, job_file_path))
+    else:
+        os.system("./genDumpVectorJobs.py {0} {1} {2} {3} {4} -o".format(args.repo_dir, intid_dir, dv_dir, size/100000 + 1, job_file_path))
+
     print "dumpVectors job wrote to " + job_file_path
 
 size_file.close()

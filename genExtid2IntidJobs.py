@@ -13,9 +13,13 @@ parser.add_argument("shardmap_split_dir", help="where splitted shardmap files lo
 parser.add_argument("intid_dir", help="write intid to here")
 parser.add_argument("n_shardmap_files", type=int)
 parser.add_argument("output_file_path", help="write condor jobs into here")
+parser.add_argument("--oneRepo", "-o", action="store_true", help="only one index repo")
 args = parser.parse_args()
 
-executable = "/bos/usr0/zhuyund/partition/DocVectors/extid2intid"
+if not args.oneRepo:
+    executable = "/bos/usr0/zhuyund/partition/DocVectors/extid2intid"
+else:
+    executable = "/bos/usr0/zhuyund/partition/DocVectors/extid2intid-oneRepo"
 
 log_file = "/tmp/zhuyund_extid2intid.log"
 log_dir = "/bos/usr0/zhuyund/partition/SplitShards/log/"
