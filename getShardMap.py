@@ -17,17 +17,20 @@ shardMap = [list() for i in range(0, args.shardNum)]
 for i in range(1, args.n_files + 1):
 
     inferFilePath = args.infer_dir + "/" + str(i) + '.inference'
-    extidFilePath = args.extid_dir + "/" + str(i) + '.inference'
+    extidFilePath = args.extid_dir + "/" + str(i) + '.extid'
 
     inferFile = open(inferFilePath, 'r')
     extidFile = open(extidFilePath, 'r')
 
+    prev_extid = ""
     for line in inferFile:
         items = [int(item) for item in line.split(':')]
         shardID = items[1]
 
         extid = extidFile.readline().strip()
-
+        if extid == prev_extid:
+            continue
+        prev_extid = extid
         shardMap[shardID - 1].append(extid)
 
     inferFile.close()

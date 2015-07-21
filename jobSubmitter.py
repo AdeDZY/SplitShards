@@ -34,7 +34,7 @@ for line in shard_file:
         job_path = base_dir + "/" + shard + "/jobs/kmeans.job"
     elif args.job_type == 4:
         job_path = base_dir + "/" + shard + "/jobs/inference.job"
-    elif args.job_type = 5:
+    elif args.job_type == 5:
         job_path = base_dir + "/" + shard + "/jobs/shardmap.job"
     else:
         print "wrong job type!"
