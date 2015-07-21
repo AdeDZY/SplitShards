@@ -63,8 +63,8 @@ for line in f:
 
 
     # sampling
-    #cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
-    #os.system(cmd)
+    cmd = "./sampleDoc.py {0} {1} {2} {3}".format(args.partition_name, shard, num, sample_rate)
+    os.system(cmd)
 
     # number of clusters
     ncluster = get_ncluster(size)
@@ -95,7 +95,7 @@ for line in f:
 
     job_file_path = job_dir + "/shardmap.job"
     executable = "/bos/usr0/zhuyund/partition/SplitShards/getShardMap.py"
-    arguments = "{0} {1} {2} {3} {5} -r {4}".format(infer_dir, extid_dir, ncluster, shardmap_dir, num)
+    arguments = "{0} {1} {2} {3} {4}".format(infer_dir, extid_dir, ncluster, shardmap_dir, num)
     log_file = "/tmp/zhuyund_shardmap.log"
     out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.out"
     err_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.err"
