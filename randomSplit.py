@@ -60,7 +60,7 @@ for line in f:
     for i in range(1, n_cluster + 1):
         out_file = open("{0}/{1}/shardMap_rand/{2}".format(base_dir, shard, i), 'w')
         for exitd in shards[i - 1]:
-            out_file.write(exitd + '\n')
+            out_file.write(exitd )
         out_file.close()
 
 f.close()
