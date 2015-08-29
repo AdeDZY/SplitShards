@@ -28,12 +28,24 @@ def get_ncluster(shard_size, aim):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
-parser.add_argument("org_shardmaps_dir")
-parser.add_argument("aim", type=int)
+parser.add_argument("--org_shardmaps_dir", "-o", default=None)
+parser.add_argument("--aim", "-a", type=int, default=0)
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
 print base_dir
+
+if not args.org_shardmaps_dir:
+    org_shard_file = open(base_dir + "/org_shardmap")
+    args.org_shardmaps_dir = org_shard_file.readline().strip()
+    org_shard_file.close()
+print args.org_shardmaps_dir
+
+if parser.aim <= 0:
+    f_ssize = open(base_dir + "/s-size")
+    args.aim = int(f_ssize.readline())
+    f_ssize.close()
+print args.aim
 
 shardmap_dir = base_dir + "/shardMap/"
 if not os.path.exists(shardmap_dir):
