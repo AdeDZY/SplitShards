@@ -15,6 +15,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("partition_name")
 parser.add_argument("shardmaps_dir")
 parser.add_argument("repo_dir")
+parser.add_argument("threshold", type=int)
 parser.add_argument("--oneRepo", "-o", action="store_true", help="only one index repo")
 args = parser.parse_args()
 
@@ -31,7 +32,7 @@ org_shard_file.write(args.shardmaps_dir)
 org_shard_file.close()
 
 # big shards
-thresholds = 1000000
+thresholds = args.threshold 
 if not os.path.isfile(args.shardmaps_dir + "/size"):
     print "no size file!"
     sys.exit(-1)

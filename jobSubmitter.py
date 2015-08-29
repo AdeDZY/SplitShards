@@ -11,7 +11,7 @@ parser.add_argument("job_type", type=int, help="1:extid2intid, 2:intid2docVec 3:
 parser.add_argument("--sleep", "-s", type=int, help="sleep time in seconds", default=90)
 parser.add_argument("--nbatch", "-n", type=int, help="submit n batches at one time", default=1)
 parser.add_argument("--start", "-t", type=int, help="start from this line of shard file", default=1)
-parser.add_argument("--end", "-e", type=int, help="submit to this line of shard file", default=200)
+parser.add_argument("--end", "-e", type=int, help="submit to this line of shard file", default=1000)
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
