@@ -25,6 +25,11 @@ print base_dir
 if not os.path.exists(base_dir):
     os.makedirs(base_dir)
 
+
+org_shard_file = open(base_dir + "/org_shardmap", 'w')
+org_shard_file.write(args.shardmaps_dir)
+org_shard_file.close()
+
 # big shards
 thresholds = 1000000
 if not os.path.isfile(args.shardmaps_dir + "/size"):
