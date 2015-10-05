@@ -39,9 +39,19 @@ for line in shard_file:
     else:
         print "wrong job type!"
 
+
     cmd = "condor_submit " + job_path
     os.system(cmd)
     n += 1
     if n % args.nbatch == 0:
-        time.sleep(args.sleep)
+        while True:
+            time.sleep(args.sleep)
+            nRunning = 0
+            if args.job_type == 2: 
+                query = "condor_q zhuyund | grep " + "\""+ "dumpVectors"+ "\"" + "| wc -l"
+                out = os.popen(query)
+                nRunning = int(out.readline())
+            if nRunning < 5:
+                break
+            print nRunning
 shard_file.close()
