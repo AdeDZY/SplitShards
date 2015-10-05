@@ -80,7 +80,7 @@ for line in f:
     extid_dir = base_dir + "/" + shard + "/extid/"
 
     job_file_path = job_dir + "/shardmap.job"
-    executable = "/bos/usr0/zhuyund/partition/SplitShards/getShardMap.py"
+    executable = "/bos/usr0/zhuyund/partition/SplitShards/getShardMap.sh"
     arguments = "{0} {1} {2} {3} {4}".format(infer_dir, extid_dir, ncluster, shardmap_dir, num)
     log_file = "/tmp/zhuyund_shardmap.log"
     out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/shardmap.out"

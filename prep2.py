@@ -77,7 +77,7 @@ for line in f:
     # gen clustering job
     job_dir = base_dir+"/" + shard + "/jobs/"
     job_file = open(job_dir + "/kmeans.job", 'w')
-    executable = "/bos/usr0/zhuyund/partition/SplitShards/kmeans.py"
+    executable = "/bos/usr0/zhuyund/partition/SplitShards/kmeans.sh"
     arguments = "{0} {1} {2} {3} {5} -r {4}".format(args.partition_name, shard, ncluster, 10, args.ref_threshold, args.lamda)
     log_file = "/tmp/zhuyund_kmeans.log"
     out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/kmeans.out"
