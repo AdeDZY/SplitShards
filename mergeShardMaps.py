@@ -41,7 +41,7 @@ if not args.org_shardmaps_dir:
     org_shard_file.close()
 print args.org_shardmaps_dir
 
-if parser.aim <= 0:
+if args.aim <= 0:
     f_ssize = open(base_dir + "/s-size")
     args.aim = int(f_ssize.readline())
     f_ssize.close()

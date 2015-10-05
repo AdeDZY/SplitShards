@@ -47,7 +47,7 @@ print base_dir
 
 # write aim to file
 f_ssize = open(base_dir + "/s-size", 'w')
-f_ssize.write(args.aim)
+f_ssize.write(str(args.aim))
 f_ssize.close()
 
 f = open(base_dir + "/shard") # splitted shard ids and numbers
