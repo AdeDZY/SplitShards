@@ -9,5 +9,6 @@ def jobGenerator(executable, arguments, log_file, err_file, out_file):
                                                                                                              log_file,
                                                                                                              err_file,
                                                                                                              out_file)
+
     return job
 
