@@ -13,11 +13,11 @@ Then...
 ---
 1. `./prep1.py  partition_name shardmaps_dir repo_dir threshold -o` 
 
-  - partition_name  run name, e.g. cw09b-s1
-  - shardmaps_dir   the path to the shardmap (inference results) directory
-  - repo_dir        indri index repo directory
-  - threshold       shard size threshold. Shards largers than this will be split
-  - -o 	--oneRepo, -o   using only one index repo. For example, cw09b has only 1 repo, but cw09a has 10 repos
+  - partition_name    run name, e.g. cw09b-s1
+  - shardmaps_dir     the path to the shardmap (inference results) directory
+  - repo_dir          indri index repo directory
+  - threshold         shard size threshold. Shards largers than this will be split
+  - -o 	--oneRepo, -o     using only one index repo. For example, cw09b has only 1 repo, but cw09a has 10 repos
  
    This step will create output/{partition_name}/ 
   
