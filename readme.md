@@ -1,6 +1,9 @@
 To split big shards:
 ---
 First, create ./output and ./log
+
+Second, change the ./getDocVecFromInference.py line 67-70 and line 82-86 for your dataset!!!!
+
 Then...
 
 1. `./prep1.py  partition_name shardmaps_dir repo_dir threshold -o` 
@@ -35,8 +38,30 @@ Then...
   - --ref_threshold REF_THRESHOLD, -r REF_THRESHOLD terms with higher probablilty than this in the reference model will be ignored.
   
   This step will generate kmeans condor jobs in output/{partition_name}/{shardid}/jobs/kmeans.job
+  
+  If big shards still exists, try ref_threshold=0.001
 
-4. Submit kmeans condor jobs.
-  -  
+4. Submit kmeans condor jobs. `./jobSubmitter.py partition_name job_type`
+  - partition_name
+  - job_type              1:extid2intid, 2:intid2docVec 3:kmeans 4:inference 5:shardmap. 
+  - --sleep SLEEP, -s SLEEP sleep time in seconds. Use 0 here because kmeans can run quickly.
+  - --nbatch NBATCH, -n NBATCH submit n batches at one time. Use 100 here to submit all jobs at once.
+  - --start START, -t START start from this line of shard file
+  - --end END, -e END     submit to this line of shard file
+  
+  example:
+  ```
+  ./jobSubmitter.py cwb-qw160-df-s6-split 3 -s 0 -n 100 
+  ```
+
+5.  Generate inference condor jobs for each shard.
+   - `./prep3.py partition_name lamda`
+
+6. Submit inference jobs and gen_shard_map jobs.
+  - './jobSubmitter.py partition_name 4 -s 30 -n 5'
+  - './jobSubmitter.py partition_name 5 -s 0 -n 100'
+  
+7. Merge shard maps into final result
+  - './mergeShardMaps.py partition_name'
   
   
