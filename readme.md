@@ -23,14 +23,14 @@ Then...
   
    output/{partition_name}/shard: list of shards that required to be split
    
-   I use threshold = 4/3 * avg_size
+   I use **threshold = 4/3 * avg_size**
 
 2. `./getDocVecFromInference.py shard_file partition_name dat_dir infer_dir -f 0 -d cw12b`
   
-  - shard_file            output/{partition_name}/shard created by prep1.py
-  - partition_name        run name, e.g. cwb-11
-  - dat_dir               original document vector directory generated during the initial clustering
-  - infer_dir             inference directory during the inital clustering
+  - **shard_file**            output/{partition_name}/shard created by prep1.py
+  - **partition_name**        run name, e.g. cwb-11
+  - **dat_dir**               original document vector directory generated during the initial clustering
+  - **infer_dir**             inference directory during the inital clustering
 
    example:
    ```
@@ -43,18 +43,18 @@ Then...
 3. Generate kmeans condor jobs for each shard. 
   - `./prep2.py partition_name lamda aim -r 1.0`
   
-  - partition_name        run name, e.g. cwb-11
-  - lamda                 lamda for the clustering. e.g. 0.1
-  - aim                   aimed shard size. e.g. avg_size
-  - --ref_threshold REF_THRESHOLD, -r REF_THRESHOLD terms with higher probablilty than this in the reference model will be ignored.
+  - **partition_name**        run name, e.g. cwb-11
+  - **lamda**                 lamda for the clustering. e.g. 0.1
+  - **aim**                   aimed shard size. e.g. avg_size
+  - **--ref_threshold** REF_THRESHOLD, -r REF_THRESHOLD terms with higher probablilty than this in the reference model will be ignored.
   
   This step will generate kmeans condor jobs in output/{partition_name}/{shardid}/jobs/kmeans.job
   
   If big shards still exists, try ref_threshold=0.001
 
 4. Submit kmeans condor jobs. `./jobSubmitter.py partition_name job_type`
-  - partition_name
-  - job_type              1:extid2intid, 2:intid2docVec 3:kmeans 4:inference 5:shardmap. 
+  - **partition_name**
+  - **job_type**              1:extid2intid, 2:intid2docVec 3:kmeans 4:inference 5:shardmap. 
   - --sleep SLEEP, -s SLEEP sleep time in seconds. Use 0 here because kmeans can run quickly.
   - --nbatch NBATCH, -n NBATCH submit n batches at one time. Use 100 here to submit all jobs at once.
   - --start START, -t START start from this line of shard file
