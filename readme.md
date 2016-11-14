@@ -22,6 +22,8 @@ Then...
    This step will create output/{partition_name}/ 
   
    output/{partition_name}/shard: list of shards that required to be split
+   
+   I use threshold = 4/3 * avg_size
 
 2. `./getDocVecFromInference.py shard_file partition_name dat_dir infer_dir -f 0 -d cw12b`
   
@@ -43,7 +45,7 @@ Then...
   
   - partition_name        run name, e.g. cwb-11
   - lamda                 lamda for the clustering. e.g. 0.1
-  - aim                   aimed shard size
+  - aim                   aimed shard size. e.g. avg_size
   - --ref_threshold REF_THRESHOLD, -r REF_THRESHOLD terms with higher probablilty than this in the reference model will be ignored.
   
   This step will generate kmeans condor jobs in output/{partition_name}/{shardid}/jobs/kmeans.job
