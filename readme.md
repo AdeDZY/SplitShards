@@ -6,6 +6,8 @@ Second, change the ./getDocVecFromInference.py line 67-70 and line 82-86 for you
 
 Then...
 
+Get Document Vectors
+---
 1. `./prep1.py  partition_name shardmaps_dir repo_dir threshold -o` 
 
   - partition_name  run name, e.g. cw09b-s1
@@ -29,6 +31,10 @@ Then...
    ```
    condor_run "./getDocVecFromInference.py output/cwb-qw160-df-s6-split/shard cwb-qw160-df-s6-split ../cw09catB/02-DocVectors/DV ../cw09catB/03-Kmeans/samplingTrial6_qweight/100Clusters-10Iters-qw160-df/inference/"
    ```
+ 
+Kmeans Clustering
+---
+
 3. Generate kmeans condor jobs for each shard. 
   - `./prep2.py partition_name lamda aim -r 1.0`
   
@@ -54,6 +60,8 @@ Then...
   ./jobSubmitter.py cwb-qw160-df-s6-split 3 -s 0 -n 100 
   ```
 
+Inference
+---
 5.  Generate inference condor jobs for each shard.
    - `./prep3.py partition_name lamda`
 
