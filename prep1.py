@@ -12,11 +12,11 @@ import argparse
 import os, sys
 
 parser = argparse.ArgumentParser()
-parser.add_argument("partition_name")
-parser.add_argument("shardmaps_dir")
-parser.add_argument("repo_dir")
-parser.add_argument("threshold", type=int)
-parser.add_argument("--oneRepo", "-o", action="store_true", help="only one index repo")
+parser.add_argument("partition_name", help="run name, e.g. cw09b-s1")
+parser.add_argument("shardmaps_dir", help="the path to the shardmap (inference results) directory")
+parser.add_argument("repo_dir", help="indri index repo directory")
+parser.add_argument("threshold", type=int, help="shard size threshold. Shards largers than this will be split")
+parser.add_argument("--oneRepo", "-o", action="store_true", help="using only one index repo. ")
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
@@ -47,7 +47,7 @@ for line in size_file:
         continue
     size = int(size)
     print size
-    if size < thresholds:
+    if size < thresholds: # or size > 900000:
         continue
     f.write(shard + " " + str(size/100000 + 1) + " " + str(size) + '\n')
     if not os.path.exists(base_dir + "/" + shard):

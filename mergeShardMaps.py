@@ -74,12 +74,14 @@ for line in size_file:
     if shard not in splitted_shards:
         cmd = "cp {0}/{1} {2}/{3}".format(args.org_shardmaps_dir, shard, shardmap_dir, shard_id)
         os.system(cmd)
+        print "{0} {1}".format(shard, shard_id)
         shard_id += 1
     else:
         for s in range(1, splitted_shards[shard] + 1):
             if not os.path.isfile("{0}/{1}/shardMap/{2}".format(base_dir, shard, s)):
-                print "lalal " + str(shard)+" "+str(s)
+                #print "lalal " + str(shard)+" "+str(s)
                 continue
+            print "{0} {1}".format(shard, shard_id)
             cmd = "cp {0}/{1}/shardMap/{2} {3}/{4}".format(base_dir, shard, s, shardmap_dir, shard_id)
             os.system(cmd)
             shard_id += 1

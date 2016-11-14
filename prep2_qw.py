@@ -42,6 +42,7 @@ parser.add_argument("--start", "-t",  type=int, default=1)
 parser.add_argument("--end", "-e",  type=int, default=1000)
 parser.add_argument("--constant", "-c", type=int, default=0, help="1 = use constant weight")
 parser.add_argument("--ref_threshold", "-r",  type=float, default=1.0)
+parser.add_argument("--dataset", "-d", default="cwb", help="cwb gov2")
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
@@ -80,13 +81,13 @@ for line in f:
     job_dir = base_dir+"/" + shard + "/jobs/"
     job_file = open(job_dir + "/kmeans.job", 'w')
     executable = "/bos/usr0/zhuyund/partition/SplitShards/kmeans_qw.sh"
-    arguments = "{0} {1} {2} {3} {5} -r {4} -c {6}".format(args.partition_name,
+    arguments = "{0} {1} {2} {3} {5} -r {4} -c {6} -d {7}".format(args.partition_name,
                                                            shard,
                                                            ncluster,
                                                            10,
                                                            args.ref_threshold,
                                                            args.qw,
-                                                           args.constant)
+                                                           args.constant, args.dataset)
     log_file = "/tmp/zhuyund_kmeans.log"
     out_file = "/bos/usr0/zhuyund/partition/SplitShards/log/kmeans.out"
     err_file = "/bos/usr0/zhuyund/partition/SplitShards/log/kmeans.err"

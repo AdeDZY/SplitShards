@@ -35,7 +35,7 @@ if not os.path.exists(centroidDir):
 
 
 logFile = trialDir+'log'
-cmd = "/bos/tmp11/zhuyund/partition/Clustering-field-int/kmeans "\
+cmd = "/bos/tmp11/zhuyund/partition/Clustering-field-int/kmeans.sh "\
       +datFile+" "+args.n_clusters+" "+args.lamda+" "+args.iter_count\
       +" "+centroidDir+" "+minVocabSeed+" " + '1 ' + '1 '
 
@@ -43,7 +43,4 @@ cmd += " " + "selectSeeds" + " field " + str(args.ref_threshold) + " >& " + logF
 r = random.random() * 60
 time.sleep(int(r))
 os.system(cmd)
-
-
-
 

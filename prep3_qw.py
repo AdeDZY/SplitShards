@@ -39,6 +39,7 @@ parser.add_argument("--start", "-t", type=int, default=1)
 parser.add_argument("--end", "-e", type=int, default=1000)
 parser.add_argument("--ref_threshold", "-r", type=float, default=1.0)
 parser.add_argument("--constant", "-c", type=int, default=0, help="1 = use constant weight")
+parser.add_argument("--dataset", "-d", default="cwb", help="cwb gov2")
 args = parser.parse_args()
 
 base_dir = "/bos/usr0/zhuyund/partition/SplitShards/output/" + args.partition_name
@@ -71,14 +72,14 @@ for line in f:
     job_dir = base_dir + "/" + shard + "/jobs/"
     dv_dir = base_dir + "/" + shard + "/docvec/"
     job_file_path = job_dir + "/inference.job"
-    os.system("./genInferenceJob_qw.py {0} {1} {2} {3} {4} {6} -r {5} -c {7}".format(dv_dir,
+    os.system("./genInferenceJob_qw.py {0} {1} {2} {3} {4} {6} -r {5} -c {7} -d {8}".format(dv_dir,
                                                                                      base_dir + "/" + shard + "/kmeans/",
                                                                                      ncluster,
                                                                                      num,
                                                                                      job_file_path,
                                                                                      args.ref_threshold,
                                                                                      args.qw,
-                                                                                     args.constant))
+                                                                                     args.constant, args.dataset))
     print "inference job write to " + job_file_path
 
     # gen getShardMap job

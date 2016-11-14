@@ -47,11 +47,15 @@ for line in shard_file:
         while True:
             time.sleep(args.sleep)
             nRunning = 0
-            if args.job_type == 2: 
+            if args.job_type == 3: 
+                query = "condor_q zhuyund | grep " + "\""+ "kmeans.sh"+ "\"" + "| wc -l"
+                out = os.popen(query)
+                nRunning = int(out.readline())
+            elif args.job_type == 2: 
                 query = "condor_q zhuyund | grep " + "\""+ "dumpVectors"+ "\"" + "| wc -l"
                 out = os.popen(query)
                 nRunning = int(out.readline())
-            if nRunning < 5:
+            if nRunning < 50:
                 break
             print nRunning
 shard_file.close()

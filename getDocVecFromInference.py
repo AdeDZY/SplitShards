@@ -56,16 +56,17 @@ def get_whole(dat_line):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("shard_file")
-    parser.add_argument("partition_name")
-    parser.add_argument("dat_dir")
-    parser.add_argument("infer_dir")
+    parser.add_argument("shard_file", help="output/{partition_name}/shard created by prep1.py")
+    parser.add_argument("partition_name", help="run name, e.g. cwb-11")
+    parser.add_argument("dat_dir", help="original document vector directory generated during the initial clustering")
+    parser.add_argument("infer_dir" ,help="inference directory during the inital clustering")
     parser.add_argument("--dataset", "-d", default='cwb', help="gov2, cwa, cwb")
     parser.add_argument("--field", "-f",  type=int, default="2", help="0: fielded 1: body only 2:whole")
     args = parser.parse_args()
 
-    if args.dataset != "cwb":
+    if args.dataset not in ["cwb", "gov2"]:
         print "Sorry! Do not have function for " + args.dataset
+        print "add your dataset here, and the stats for the dataset below!!!"
         exit(-1)
 
     shards = set()
@@ -73,10 +74,21 @@ def main():
     shard_dirs = {}
     out_files = {}
     output_lines = {}
-
-    n_docs = 50220423
-    split_size = 100000
-    pref = "cw09catB"
+    
+    if args.dataset == 'cwb':
+        n_docs = 50220423
+        split_size = 100000
+        pref = "cw09catB"
+    elif args.dataset == "cw12b":
+        n_docs = -1
+        split_size = -1
+        pref = "cw12catB"
+        assert n_docs > 0, "Keyang, add stats for cw12b here!!!"
+    elif args.dataset == 'gov2':
+        n_docs = 25205179 
+        split_size = 100000
+        pref = "gov2"
+	
 
     for line in open(args.shard_file):
         shard, n_splits, size = line.split()
@@ -100,13 +112,11 @@ def main():
         print "{0}/{1}_{2}-{3}.dat".format(args.dat_dir, pref, start, end)
         for infer_line in infer_file:
             dat_line = dat_file.readline().strip()
-            if not dat_line:
-                infer_file.close()
-                dat_file.close()
-                continue
             intid, shard = [int(t) for t in infer_line.split(':')]
             if shard not in shards:
                 continue
+            if not dat_line:
+                print infer_file, intid
             if args.field == 0:
                 output_lines[shard] += dat_line + '\n'
             if args.field == 1:
